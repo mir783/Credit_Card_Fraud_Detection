@@ -45,11 +45,15 @@ def predict(data : input_data):
         df = pd.DataFrame([data_dict])
         
         prob = model.predict_proba(df)[0]
-        prediction = 1 if prob >= Threshold else 0
-        confidence = max(prob)
+        prob_1 = prob[1]
+        prediction = 1 if prob_1 >= Threshold else 0
+        confidence = float(max(prob))
         class_labels = ['0','1']
         
-        class_prob = dict(zip(class_labels,map(lambda p : round(p,4),prob)))
+        class_prob = {
+            label: round(float(p), 4)
+            for label, p in zip(class_labels, prob)
+        }
         
         return {
             "prediction": prediction,
